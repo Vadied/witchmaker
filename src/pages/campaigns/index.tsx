@@ -11,25 +11,37 @@ import CampaignCard from "@/components/campaignCard";
 import Link from "next/link";
 
 export const getStaticProps: GetStaticProps = async () => {
-  const response = await fetch("https://jsonplaceholder.typicode.com/posts");
-  const data = await response.json();
+  try {
+    console.log("hei there!!!!!!!!!!!!!!!!!!!!!!!!");
+    const response = await fetch("https://jsonplaceholder.typicode.com/posts");
+    const data = await response.json();
+    console.log("test", data);
+    return {
+      props: {
+        campaigns: data.slice(0, 3),
+      },
+    };
+  } catch (error) {
+    console.log("Error recovering campaign -", error);
 
-  return {
-    props: {
-      campaigns: data.slice(0, 3),
-    },
-  };
+    return {
+      props: {
+        campaigns: [],
+      },
+    };
+  }
 };
 
-const CampaignList = ({
-  campaigns = [],
-}: InferGetStaticPropsType<typeof getStaticProps>) => {
-  const router = useRouter();
+const CampaignList = (
+  props: InferGetStaticPropsType<typeof getStaticProps>
+) => {
+  console.log("CampaignList rendered with props:", props);
+  // const router = useRouter();
   const { t } = useContext(StateContext);
 
   const handleClick = () => {
     // router.push("/campaign");
-    console.log("create new Campaign")
+    console.log("create new Campaign");
   };
 
   return (
@@ -39,11 +51,11 @@ const CampaignList = ({
         <Button handleClick={handleClick}>{t("campaign.btn.new.label")}</Button>
       </h2>
       <div className="content">
-        {campaigns.map((c: ICampaign) => (
+        {/* {props.campaigns.map((c: ICampaign) => (
           <Link href={`campaigns/${c.id}`} passHref>
             <CampaignCard {...c} />
           </Link>
-        ))}
+        ))} */}
       </div>
     </>
   );
