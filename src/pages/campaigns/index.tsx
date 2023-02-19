@@ -22,13 +22,14 @@ export const getStaticProps: GetStaticProps = async () => {
 };
 
 const CampaignList = ({
-  campaigns,
+  campaigns = [],
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const router = useRouter();
   const { t } = useContext(StateContext);
 
   const handleClick = () => {
-    router.push("/campaign");
+    // router.push("/campaign");
+    console.log("create new Campaign")
   };
 
   return (

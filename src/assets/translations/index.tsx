@@ -1,1 +1,5 @@
-export * as it from "./it";
+import it from "./it";
+
+export default {
+  it,
+};
