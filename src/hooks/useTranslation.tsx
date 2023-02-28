@@ -19,6 +19,7 @@ const useTranslation = (language: string) => {
     );
   };
 
+  console.log("translate --->", translate);
   return {
     t: translate,
   };

@@ -1,11 +1,9 @@
 import Head from "next/head";
 
-
 import Context from "@/components/context";
 
-import CampaignList from "./campaigns";
-
 import styles from "@/styles/Home.module.css";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -18,7 +16,11 @@ export default function Home() {
       </Head>
       <Context>
         <main className={styles.main}>
-          <CampaignList />
+          <div>
+            <Link href="campaigns">Campagne</Link>
+            <Link href="characters">Personaggi</Link>
+          </div>
+          <div>Home</div>
         </main>
       </Context>
     </>

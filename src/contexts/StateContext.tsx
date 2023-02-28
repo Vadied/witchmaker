@@ -19,6 +19,7 @@ const StateProvider = ({ children }: Props) => {
     t,
   };
 
+  console.log("context --->", context);
   return (
     <StateContext.Provider value={context}>{children}</StateContext.Provider>
   );

@@ -1,4 +1,4 @@
-export default {
+const translation = {
   campaign: {
     list: {
       title: "Lista Campagne",
@@ -10,3 +10,5 @@ export default {
     },
   },
 };
+
+export default translation;

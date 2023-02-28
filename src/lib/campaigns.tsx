@@ -1,23 +1,12 @@
-import fs from "fs";
-import path from "path";
-
 import { ICampaign } from "@/models/campaign.model";
+import campaigns from "@/assets/mocks/campaings.json";
 
-const directory = path.join(process.cwd(), "campaigns");
-
-export const getSortedCampaignsData = async () => {
-  const response = await fetch("https://jsonplaceholder.typicode.com/posts");
-  const data = await response.json();
-  console.log("getSortedCampaignsData --->", data);
+export const getAllCampaigns = async () => {
+  const data: ICampaign[] = campaigns.campaigns;
   // Sort campaigns by date
-  return (data as ICampaign[]).sort((a, b) =>
-    a.createdAt < b.createdAt ? 1 : -1
-  );
+  return data.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
 };
 
 export async function getCampaignData(id: string) {
-  const response = await fetch(
-    `https://jsonplaceholder.typicode.com/posts/${id}}`
-  );
-  return response.json();
+  return campaigns.campaigns.find((c) => c.id === id) as ICampaign;
 }

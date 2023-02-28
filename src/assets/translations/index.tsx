@@ -1,5 +1,5 @@
 import it from "./it";
 
-export default {
-  it,
-};
+const translations = { it };
+
+export default translations;

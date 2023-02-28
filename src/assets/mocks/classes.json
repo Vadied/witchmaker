@@ -1,0 +1,9 @@
+{
+    "classes": [
+        {"id": "1", "code": "mage", "name": "Mage"},
+        {"id": "2", "code": "hunter", "name": "Hunter"},
+        {"id": "3", "code": "warlock", "name": "warlock"},
+        {"id": "4", "code": "cleric", "name": "cleric"},
+        {"id": "5", "code": "rogue", "name": "rogue"}
+    ]
+}

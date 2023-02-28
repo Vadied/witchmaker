@@ -13,7 +13,7 @@ const useAsync = (callback, dependencies = []) => {
       .then(setValue)
       .catch(setError)
       .finally(() => setLoading(false));
-  }, [...dependencies]);
+  }, [callback, ...dependencies]);
 
   useEffect(() => {
     callbackMemoized();

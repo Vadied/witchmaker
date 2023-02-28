@@ -1,6 +1,6 @@
-import { GetStaticProps, InferGetStaticPropsType } from "next";
+import { GetServerSideProps } from "next";
 import { useContext } from "react";
-import { useRouter } from "next/router";
+import Link from "next/link";
 
 import { ICampaign } from "@/models/campaign.model";
 
@@ -8,37 +8,17 @@ import { StateContext } from "@/contexts/StateContext";
 
 import Button from "@/components/button";
 import CampaignCard from "@/components/campaignCard";
-import Link from "next/link";
 
-export const getStaticProps: GetStaticProps = async () => {
-  try {
-    console.log("hei there!!!!!!!!!!!!!!!!!!!!!!!!");
-    const response = await fetch("https://jsonplaceholder.typicode.com/posts");
-    const data = await response.json();
-    console.log("test", data);
-    return {
-      props: {
-        campaigns: data.slice(0, 3),
-      },
-    };
-  } catch (error) {
-    console.log("Error recovering campaign -", error);
+import { getAllCampaigns } from "@/lib/campaigns";
 
-    return {
-      props: {
-        campaigns: [],
-      },
-    };
-  }
+type Props = {
+  campaigns: ICampaign[];
 };
-
-const CampaignList = (
-  props: InferGetStaticPropsType<typeof getStaticProps>
-) => {
-  console.log("CampaignList rendered with props:", props);
+const CampaignList = ({ campaigns }: Props) => {
+  console.log("CampaignList rendered:", campaigns);
   // const router = useRouter();
   const { t } = useContext(StateContext);
-
+  console.log("test --->", t);
   const handleClick = () => {
     // router.push("/campaign");
     console.log("create new Campaign");
@@ -59,6 +39,12 @@ const CampaignList = (
       </div>
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps<Props> = async () => {
+  // TODO: Fetch all campaigns from API or database
+  const campaigns = await getAllCampaigns();
+  return { props: { campaigns } };
 };
 
 export default CampaignList;
