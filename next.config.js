@@ -12,4 +12,5 @@
 
 module.exports = {
   reactStrictMode: true,
+  redirect: [{ source: "/campaigns", destination: "/", permanent: true }],
 };
