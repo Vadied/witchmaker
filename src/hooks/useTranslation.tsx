@@ -1,28 +1,33 @@
+import { useRouter } from "next/router";
+import { useCallback } from "react";
+import translations from "@/assets/translations";
 import { ITranslations } from "@/models/translation.model";
 
-import translations from "@/assets/translations";
-import { lang_fallback } from "@/assets/constants";
+export default function useTranslation() {
+  const router = useRouter();
+  const { locale, asPath } = router;
 
-const getNestedTranslations = (language: string, keys: string[]) =>
-  keys.reduce(
-    (obj, key) => (obj as ITranslations)?.[key],
-    (translations as ITranslations)[language]
+  const setLocale = useCallback(
+    (locale: string) => {
+      router.push(asPath, asPath, { locale });
+    },
+    [router, asPath]
   );
 
-const useTranslation = (language: string) => {
+  const getNestedTranslations = (language: string, keys: string[]) =>
+    keys.reduce(
+      (obj, key) => (obj as ITranslations)?.[key],
+      (translations as ITranslations)[language]
+    );
+
   const translate = (key: string) => {
     const keys = key.split(".");
     return (
-      (getNestedTranslations(language, keys) as string) ??
-      (getNestedTranslations(lang_fallback, keys) as string) ??
+      (getNestedTranslations(locale || "en", keys) as string) ??
+      (getNestedTranslations("en", keys) as string) ??
       key
     );
   };
 
-  console.log("translate --->", translate);
-  return {
-    t: translate,
-  };
-};
-
-export default useTranslation;
+  return { t: translate, locale, setLocale };
+}

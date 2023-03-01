@@ -15,10 +15,8 @@ type Props = {
   campaigns: ICampaign[];
 };
 const CampaignList = ({ campaigns }: Props) => {
-  console.log("CampaignList rendered:", campaigns);
-  // const router = useRouter();
   const { t } = useContext(StateContext);
-  console.log("test --->", t);
+  console.log("campigne", t);
   const handleClick = () => {
     // router.push("/campaign");
     console.log("create new Campaign");
@@ -41,10 +39,15 @@ const CampaignList = ({ campaigns }: Props) => {
   );
 };
 
+CampaignList.auth = {
+  roles: ["user"],
+  unauthorized: "/api/auth/signin", // redirect to this url
+};
+
+export default CampaignList;
+
 export const getServerSideProps: GetServerSideProps<Props> = async () => {
   // TODO: Fetch all campaigns from API or database
   const campaigns = await getAllCampaigns();
   return { props: { campaigns } };
 };
-
-export default CampaignList;

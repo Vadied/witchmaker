@@ -1,19 +1,30 @@
-import type { AppProps } from "next/app";
 import { SessionProvider } from "next-auth/react";
 
 import "@/styles/globals.css";
 import "@/components/navbar/navbar.css";
 
-import Navbar from "@/components/navbar";
+import { CustomAppProps } from "@/models/component.model";
 
-export default function App({
+import Navbar from "@/components/navbar";
+import Auth from "@/components/auth";
+import Context from "@/components/context";
+
+const App = ({
   Component,
   pageProps: { session, ...pageProps },
-}: AppProps) {
+}: CustomAppProps) => {
   return (
     <SessionProvider session={session}>
-      <Navbar />
-      <Component {...pageProps} />
+      <Context>
+        <>
+          <Navbar />
+          <Auth auth={Component.auth || null}>
+            <Component {...pageProps} />
+          </Auth>
+        </>
+      </Context>
     </SessionProvider>
   );
-}
+};
+
+export default App;

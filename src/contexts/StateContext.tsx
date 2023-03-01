@@ -12,7 +12,7 @@ type Props = {
   children: JSX.Element;
 };
 const StateProvider = ({ children }: Props) => {
-  const { t } = useTranslation("it");
+  const { t } = useTranslation();
 
   const context = {
     language,
