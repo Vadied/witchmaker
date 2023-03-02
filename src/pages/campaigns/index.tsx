@@ -1,24 +1,37 @@
 import { GetServerSideProps } from "next";
-import { useContext } from "react";
 import Link from "next/link";
+import { getServerSession } from "next-auth/next";
+import { useSession } from "next-auth/react";
+
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
 import { ICampaign } from "@/models/campaign.model";
 
-import { StateContext } from "@/contexts/StateContext";
+import { useStateContext } from "@/contexts/StateContext";
 
 import Button from "@/components/button";
 import CampaignCard from "@/components/campaignCard";
+import Loader from "@/components/loader";
 
-import { getAllCampaigns } from "@/lib/campaigns";
+import { getAllCampaignsByUser } from "@/lib/campaigns";
+
+import { isAuthorized } from "@/utils/utils";
+
+import { USER } from "@/assets/constants/roles";
+import { PAGE_AUTH } from "@/assets/constants/urls";
+import { Session } from "next-auth";
 
 type Props = {
   campaigns: ICampaign[];
 };
 const CampaignList = ({ campaigns }: Props) => {
-  const { t } = useContext(StateContext);
-  console.log("campigne", t);
+  const { t } = useStateContext();
+  const { data: session, status } = useSession();
+
+  console.log("session --->", session?.user);
+  console.log("status --->", status);
+
   const handleClick = () => {
-    // router.push("/campaign");
     console.log("create new Campaign");
   };
 
@@ -29,25 +42,40 @@ const CampaignList = ({ campaigns }: Props) => {
         <Button handleClick={handleClick}>{t("campaign.btn.new.label")}</Button>
       </h2>
       <div className="content">
-        {/* {props.campaigns.map((c: ICampaign) => (
-          <Link href={`campaigns/${c.id}`} passHref>
+        {campaigns.map((c: ICampaign) => (
+          <Link key={c.id} href={`campaigns/${c.id}`} passHref>
             <CampaignCard {...c} />
           </Link>
-        ))} */}
+        ))}
       </div>
     </>
   );
 };
 
-CampaignList.auth = {
-  roles: ["user"],
-  unauthorized: "/api/auth/signin", // redirect to this url
-};
-
 export default CampaignList;
 
-export const getServerSideProps: GetServerSideProps<Props> = async () => {
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  // const { data: session } = useSession();
   // TODO: Fetch all campaigns from API or database
-  const campaigns = await getAllCampaigns();
-  return { props: { campaigns } };
+  const session: Session | null = await getServerSession(req, res, authOptions);
+
+  console.log("session --->", session);
+  if (!session || !isAuthorized(session?.user?.roles || [], [USER]))
+    return {
+      props: {
+        redirect: {
+          destination: `${PAGE_AUTH}?callbackUrl=${process.env.CURRENT_URL}/campaigns`,
+          permanent: false,
+        },
+      },
+    };
+
+  const campaigns = await getAllCampaignsByUser(session?.user?.id);
+  console.log("campaigns --->", campaigns);
+  return {
+    props: {
+      session,
+      campaigns,
+    },
+  };
 };

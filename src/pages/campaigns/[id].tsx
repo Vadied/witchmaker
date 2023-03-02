@@ -23,7 +23,7 @@ const Campaign = ({ id, characters = [] }: Props) => {
       <h2>Campaign Name {id}</h2>
       <div>
         {characters.map((c: ICharacter, i: number) => (
-          <Link key={i} href={`character/${c.id}`} passHref>
+          <Link key={i} href={`character/${c.id}`}>
             <CharacterCard {...c} />
           </Link>
         ))}

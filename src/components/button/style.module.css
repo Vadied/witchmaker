@@ -1,0 +1,30 @@
+.button {
+  padding: 5px 10px;
+  border-radius: 10px;
+  text-align: center;
+  background-color: #04959f;
+}
+
+.button:hover {
+  background-color: #fff;
+  color: #04959f;
+}
+
+.button.secondary {
+  border: 1px solid #04959f;
+}
+
+.button.secondary:hover {
+  background-color: #04959f;
+  color: #fff;
+  border: 1px solid #04959f;
+}
+
+.button.link {
+  background: none;
+  color: blue;
+}
+
+.button.link:hover {
+  color: red;
+}

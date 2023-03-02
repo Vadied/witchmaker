@@ -1,0 +1,10 @@
+.divider {
+  width: 100%;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.divider .line {
+  width: 100%;
+  border: 2px solid #000;
+}

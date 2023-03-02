@@ -1,9 +1,44 @@
 {
     "users": [
-        {"id": "1", "name": "Davide"},
-        {"id": "2", "name": "Riccardo"},
-        {"id": "3", "name": "Davide Riccio"},
-        {"id": "4", "name": "Claudio"},
-        {"id": "5", "name": "Eiccardo T"}
+        {
+            "id": "1",
+            "name": "Davide",
+            "email": "asd1@asd.it",
+            "roles": [
+                "admin"
+            ]
+        },
+        {
+            "id": "2",
+            "name": "Riccardo",
+            "email": "asd2@asd.it",
+            "roles": [
+                "user"
+            ]
+        },
+        {
+            "id": "3",
+            "name": "Davide Riccio",
+            "email": "asd3@asd.it",
+            "roles": [
+                "user"
+            ]
+        },
+        {
+            "id": "4",
+            "name": "Claudio",
+            "email": "asd4@asd.it",
+            "roles": [
+                "user"
+            ]
+        },
+        {
+            "id": "5",
+            "name": "Eiccardo T",
+            "email": "asd5@asd.it",
+            "roles": [
+                "user"
+            ]
+        }
     ]
 }

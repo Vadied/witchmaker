@@ -1,9 +1,7 @@
 import Head from "next/head";
-
-import Context from "@/components/context";
-
-import styles from "@/styles/Home.module.css";
 import Link from "next/link";
+
+import { PAGE_CAMPAIGNS, PAGE_CHARACTERS } from "@/assets/constants/urls";
 
 export default function Home() {
   return (
@@ -14,15 +12,13 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Context>
-        <main className={styles.main}>
+        <main >
           <div>
-            <Link href="campaigns">Campagne</Link>
-            <Link href="characters">Personaggi</Link>
+            <Link href={PAGE_CAMPAIGNS}>Campagne</Link>
+            <Link href={PAGE_CHARACTERS}>Personaggi</Link>
           </div>
           <div>Home</div>
         </main>
-      </Context>
     </>
   );
 }

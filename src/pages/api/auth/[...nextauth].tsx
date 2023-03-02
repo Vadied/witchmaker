@@ -1,37 +1,56 @@
+import { AuthOptions } from "next-auth";
 import NextAuth from "next-auth/next";
+import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
+import { compare } from "bcrypt";
 
-export default NextAuth({
+import User from "@/schemas/User";
+
+import dbConnect from "@/lib/dbConnect";
+import clientPromise from "@/lib/mongoDb";
+
+export const authOptions: AuthOptions = {
   providers: [
     CredentialsProvider({
+      id: "credentials",
+      name: "Credentials",
       credentials: {
         email: {
           label: "Email",
-          type: "email",
-          placeholder: "email@email.it",
+          type: "text",
         },
-        password: { label: "Password", type: "password" },
+        password: {
+          label: "Password",
+          type: "password",
+        },
       },
-      async authorize(credentials, req) {
-        // Add logic here to look up the user from the credentials supplied
-        const user = {
-          id: "1",
-          name: "J Smith",
-          email: "jsmith@example.com",
-          roles: ["user"],
-        };
+      async authorize(credentials) {
+        await dbConnect();
 
-        if (user) {
-          // Any object returned will be saved in `user` property of the JWT
-          return user;
+        // Find user with the email
+        const user = await User.findOne({
+          email: credentials?.email,
+        });
+
+        // Email Not found
+        if (!user) {
+          throw new Error("Email is not registered");
         }
 
-        // If you return null then an error will be displayed advising the user to check their details.
-        return null;
+        // Check hased password with DB hashed password
+        const isPasswordCorrect = await compare(
+          credentials!.password,
+          user.hashedPassword
+        );
 
-        // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
+        // Incorrect password
+        if (!isPasswordCorrect) {
+          throw new Error("Password is incorrect");
+        }
+
+        return user;
       },
     }),
     GoogleProvider({
@@ -43,4 +62,18 @@ export default NextAuth({
       clientSecret: process.env.GITHUB_SECRET || "",
     }),
   ],
-});
+  pages: {
+    signIn: "/auth",
+  },
+  debug: process.env.NODE_ENV === "development",
+  adapter: MongoDBAdapter(clientPromise),
+  session: {
+    strategy: "jwt",
+  },
+  jwt: {
+    secret: process.env.NEXTAUTH_JWT_SECRET,
+  },
+  secret: process.env.NEXTAUTH_SECRET,
+};
+
+export default NextAuth(authOptions);

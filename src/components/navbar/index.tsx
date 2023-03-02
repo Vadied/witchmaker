@@ -1,55 +1,63 @@
+import { useRouter } from "next/router";
+import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { useSession, signIn, signOut } from "next-auth/react";
+
+import style from "./style.module.css";
+
+import {
+  PAGE_CAMPAIGNS,
+  PAGE_CHARACTERS,
+  PAGE_AUTH,
+} from "@/assets/constants/urls";
 
 const Navbar = () => {
+  const { pathname } = useRouter();
   const { data: session, status } = useSession();
-  const loading = status === "loading";
-  
+  console.log(status, session);
+
+  const pagesWithoutNavbar = [PAGE_AUTH];
+
+  if (pagesWithoutNavbar.includes(pathname)) return null;
+
   return (
-    <nav className="header">
-      <h1 className="logo">
+    <div className={`${style.navbar}`}>
+      <div className={`${style.logo} center-content`}>
         <Link href="/">WitchMaker</Link>
-      </h1>
-      <ul className={`main-nav ${loading ? "loading" : "loaded"}`}>
+      </div>
+      <div className={`${style.links}`}>
         {!session && (
-          <li>
-            <Link href="api/auth/signin">
-              <div
-                onClick={(e) => {
-                  e.preventDefault();
-                  signIn();
-                }}
-              >
-                Sign in
-              </div>
-            </Link>
-          </li>
+          <Link href={PAGE_AUTH}>
+            <div
+              onClick={(e) => {
+                e.preventDefault();
+                signIn();
+              }}
+            >
+              Sign in
+            </div>
+          </Link>
         )}
 
         {session && (
           <>
-            <li>
-              <Link href="/campaigns">Campaigns</Link>
-            </li>
-            <li>
-              <Link href="/characters">Characters</Link>
-            </li>
-            <li>
-              <Link href="api/auth/signout">
-                <div
-                  onClick={(e) => {
-                    e.preventDefault();
-                    signOut();
-                  }}
-                >
-                  Sign Out
-                </div>
-              </Link>
-            </li>
+            <Link href={PAGE_CAMPAIGNS}>Campaigns</Link>
+
+            <Link href={PAGE_CHARACTERS}>Characters</Link>
+
+            <Link href={PAGE_AUTH}>
+              <div
+                onClick={(e) => {
+                  e.preventDefault();
+                  signOut();
+                }}
+              >
+                Sign Out
+              </div>
+            </Link>
           </>
         )}
-      </ul>
-    </nav>
+      </div>
+    </div>
   );
 };
 

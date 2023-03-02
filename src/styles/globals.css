@@ -105,3 +105,17 @@ a {
     color-scheme: dark;
   }
 }
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.center-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.center-content.column {
+  flex-direction: column;
+}

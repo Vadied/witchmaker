@@ -1,3 +1,6 @@
+export const isAuthorized = (userRoles: string[], availablesRoles: string[]) =>
+  userRoles.some((r) => availablesRoles.includes(r));
+
 export const generateName = () => {
   const prefixes = [
     "Al",
