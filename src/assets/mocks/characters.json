@@ -7,7 +7,7 @@
             "class": "1",
             "createdAt": "2022-06-01",
             "campaign": "2",
-            "user": "1"
+            "createdBy": "1"
         },
         {
             "id": "2",
@@ -16,7 +16,7 @@
             "class": "2",
             "createdAt": "2022-06-01",
             "campaign": "1",
-            "user": "1"
+            "createdBy": "1"
         },
         {
             "id": "3",
@@ -25,7 +25,7 @@
             "class": "1",
             "createdAt": "2022-06-01",
             "campaign": "2",
-            "user": "2"
+            "createdBy": "2"
         },
         {
             "id": "4",
@@ -34,7 +34,7 @@
             "class": "3",
             "createdAt": "2022-06-01",
             "campaign": "2",
-            "user": "3"
+            "createdBy": "3"
         }
     ]
 }
