@@ -1,3 +1,4 @@
+import { MouseEventHandler } from "react";
 import { useRouter } from "next/router";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
@@ -20,7 +21,7 @@ const Navbar = () => {
   const pagesWithoutNavbar = [`/${PAGE_AUTH}`];
   if (pagesWithoutNavbar.includes(router.pathname)) return null;
 
-  const handleSignOut = async (e: Event) => {
+  const handleSignOut: MouseEventHandler<HTMLDivElement> = async (e) => {
     e.preventDefault();
     await signOut();
     router.push(`/${PAGE_AUTH}`);
