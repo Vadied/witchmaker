@@ -1,5 +1,6 @@
 import { GetServerSideProps } from "next";
 import Link from "next/link";
+import { Session } from "next-auth";
 import { getServerSession } from "next-auth/next";
 import { useSession } from "next-auth/react";
 
@@ -19,7 +20,6 @@ import { isAuthorized } from "@/utils/utils";
 
 import { USER } from "@/assets/constants/roles";
 import { PAGE_AUTH } from "@/assets/constants/urls";
-import { Session } from "next-auth";
 
 type Props = {
   campaigns: ICampaign[];
@@ -55,8 +55,6 @@ const CampaignList = ({ campaigns }: Props) => {
 export default CampaignList;
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-  // const { data: session } = useSession();
-  // TODO: Fetch all campaigns from API or database
   const session: Session | null = await getServerSession(req, res, authOptions);
 
   console.log("session --->", session);

@@ -1,16 +1,16 @@
 import style from "./style.module.css";
 
 export type Props = {
-  type: string;
+  type?: string;
   id?: string;
   enabled?: boolean;
   isLink?: boolean;
   customClasses?: string;
-  handleClick(): void;
+  handleClick?(): void;
   children: JSX.Element | string;
 };
 const Button = ({
-  type = "",
+  type = "primary",
   id = "",
   enabled = true,
   customClasses = "",
@@ -20,12 +20,10 @@ const Button = ({
   const enabledClass = (enabled && "cursor-pointer") || "";
 
   const onClick = () => {
-    if (!enabled) return;
+    if (!enabled || !handleClick) return;
 
     handleClick();
   };
-
-  console.log(style[type])
 
   return (
     <div

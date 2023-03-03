@@ -1,5 +1,17 @@
+import { IParams } from "@/models/params.model";
+
 export const isAuthorized = (userRoles: string[], availablesRoles: string[]) =>
   userRoles.some((r) => availablesRoles.includes(r));
+
+  export const handleEnter = (
+    key: string,
+    callback: (params: IParams) => void,
+    params: IParams = {}
+) => {
+    if (key !== "Enter") return;
+
+    callback(params);
+};
 
 export const generateName = () => {
   const prefixes = [

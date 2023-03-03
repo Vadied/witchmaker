@@ -8,6 +8,6 @@ export interface ICharacter {
   level: number;
   class: IClass | string;
   campaign: ICampaign | string;
-  user: IUser | string;
+  createdBy: IUser | string;
   createdAt: string;
 }

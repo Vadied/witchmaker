@@ -69,15 +69,24 @@ export default async function handler(
     surname,
     email,
     hashedPassword,
-    roles: [USER]
+    roles: [USER],
   });
+
+  const response = {
+    msg: "Successfuly created new User",
+    user: {
+      name,
+      surname,
+      email,
+      roles: [USER],
+      _id: newUser._id,
+    },
+  };
 
   newUser
     .save()
-    .then(() =>
-      res.status(200).json({ msg: "Successfuly created new User: " + newUser })
-    )
-    .catch((err: string) =>
-      res.status(400).json({ error: "Error on '/api/register': " + err })
+    .then(() => res.status(200).json(response))
+    .catch((error: string) =>
+      res.status(400).json({ error })
     );
 }

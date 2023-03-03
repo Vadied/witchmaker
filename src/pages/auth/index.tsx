@@ -1,11 +1,15 @@
-import { useState, useRef } from "react";
+import { useState, useRef, KeyboardEventHandler } from "react";
 import { useRouter } from "next/router";
 import { getProviders, signIn } from "next-auth/react";
+import axios from "axios";
 
 import style from "@/styles/Auth.module.css";
 
 import Divider from "@/components/divider";
 import ProviderButtons from "@/components/providersButtons";
+import Button from "@/components/button";
+
+import { handleEnter } from "@/utils/utils";
 
 import {
   API_REGISTER,
@@ -13,8 +17,6 @@ import {
   PAGE_HOME,
   PAGE_AUTH,
 } from "@/assets/constants/urls";
-import axios from "axios";
-import Button from "@/components/button";
 
 const Auth = ({ providers }: any) => {
   const router = useRouter();
@@ -42,25 +44,25 @@ const Auth = ({ providers }: any) => {
 
   const loginUser = async () => {
     const res: any = await signIn("credentials", {
-      email: emailRef?.current || ({} as currentValue).value,
-      password: passwordRef?.current || ({} as currentValue).value,
+      email: (emailRef?.current as currentValue).value,
+      password: (passwordRef?.current as currentValue).value,
       redirect: false,
       callbackUrl: PAGE_CAMPAIGNS,
     });
 
-    res.error ? console.log(res.error) : redirectToHome();
+    res.error ? console.log("Login error -", res.error) : redirectToHome();
   };
 
   const registerUser = async () => {
     try {
-      const res = await axios.post(
+      await axios.post(
         API_REGISTER,
         {
-          name: nameRef?.current || ({} as currentValue).value,
-          surname: surnameRef?.current || ({} as currentValue).value,
-          email: emailRef?.current || ({} as currentValue).value,
-          password: passwordRef?.current || ({} as currentValue).value,
-          confirmPassword: confirmRef?.current || ({} as currentValue).value,
+          name: (nameRef?.current as currentValue).value,
+          surname: (surnameRef?.current as currentValue).value,
+          email: (emailRef?.current as currentValue).value,
+          password: (passwordRef?.current as currentValue).value,
+          confirmPassword: (confirmRef?.current as currentValue).value,
         },
         {
           headers: {
@@ -69,17 +71,19 @@ const Auth = ({ providers }: any) => {
           },
         }
       );
-
       await loginUser();
       redirectToHome();
     } catch (e) {
-      console.log(e);
+      console.log("Register Error -", e);
     }
   };
 
   const formSubmit = () => {
     authType === "Login" ? loginUser() : registerUser();
   };
+
+  const onKeyUp: KeyboardEventHandler<HTMLInputElement> = (e) =>
+    handleEnter(e.key, formSubmit);
 
   const isRegistering = authType === "Register";
 
@@ -106,21 +110,44 @@ const Auth = ({ providers }: any) => {
         <form onSubmit={formSubmit}>
           <div className={`${style.form} center-content column`}>
             {isRegistering && (
-              <input type="text" ref={nameRef} placeholder={"Name"} />
+              <input
+                type="text"
+                ref={nameRef}
+                placeholder={"Name"}
+                onKeyUp={onKeyUp}
+              />
             )}
             {isRegistering && (
-              <input type="text" ref={surnameRef} placeholder={"Surname"} />
+              <input
+                type="text"
+                ref={surnameRef}
+                placeholder={"Surname"}
+                onKeyUp={onKeyUp}
+              />
             )}
-            <input type="email" ref={emailRef} placeholder={"Email"} />
-            <input type="password" ref={passwordRef} placeholder={"Password"} />
+            <input
+              type="email"
+              ref={emailRef}
+              placeholder={"Email"}
+              onKeyUp={onKeyUp}
+            />
+            <input
+              type="password"
+              ref={passwordRef}
+              placeholder={"Password"}
+              onKeyUp={onKeyUp}
+            />
             {isRegistering && (
               <input
                 type="password"
                 ref={confirmRef}
                 placeholder={"Confirm password"}
+                onKeyUp={onKeyUp}
               />
             )}
-            <button type="submit">{authType}</button>
+            <Button type={"primary"} handleClick={formSubmit}>
+              {authType}
+            </Button>
           </div>
         </form>
       </div>
