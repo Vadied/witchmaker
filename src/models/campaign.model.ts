@@ -5,5 +5,6 @@ export interface ICampaign {
   name: string;
   closedAt: string;
   master: IUser | string;
+  createdBy: IUser | string;
   createdAt: string;
 }
