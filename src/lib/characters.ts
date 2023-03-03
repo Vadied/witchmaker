@@ -1,22 +1,129 @@
-import { ICharacter } from "@/models/character.model";
-import data from "@/assets/mocks/characters.json";
+import type { NextApiRequest, NextApiResponse } from "next";
 
-// const directory = path.join(process.cwd(), "characters");
+import Character from "@/schemas/Character";
 
-export const getAllCharacters = async () => {
-  const characters: ICharacter[] = data.characters;
-  // Sort characters by date
-  return characters.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
-};
+import { ResponseData } from "@/models/response.model";
 
-export const getCharacterByCampaign = async (id: string) => {
-  const characters: ICharacter[] = data.characters;
-  // Sort characters by date
-  return characters
-    .filter((c) => c.campaign === id)
-    .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
-};
+// get : http://localhost:3000/api/characters
+export async function getCharacters(
+  req: NextApiRequest,
+  res: NextApiResponse<ResponseData>
+) {
+  try {
+    const characters = await Character.find({});
 
-export async function getCharacterData(id: string) {
-  return data.characters.find((c) => c.id === id) as ICharacter;
+    if (!characters) return res.status(404).json({ error: "Data not Found" });
+    res.status(200).json({
+      data: characters.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1)),
+    });
+  } catch (error) {
+    res.status(404).json({ error: "Error While Fetching Data" });
+  }
+}
+
+// post : http://localhost:3000/api/characters/getByUser
+export async function getCharactersByUser(
+  req: NextApiRequest,
+  res: NextApiResponse<ResponseData>
+) {
+  try {
+    const { userId } = req.body;
+    const characters = await Character.find({ createdBy: userId });
+
+    if (!characters) return res.status(404).json({ error: "Data not Found" });
+    res.status(200).json({
+      data: characters.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1)),
+    });
+  } catch (error) {
+    res.status(404).json({ error: "Error While Fetching Data" });
+  }
+}
+// post : http://localhost:3000/api/characters/getByCampaign
+export async function getCharactersByCampaign(
+  req: NextApiRequest,
+  res: NextApiResponse<ResponseData>
+) {
+  try {
+    const { campaignId } = req.body;
+    const characters = await Character.find({ campaign: campaignId });
+
+    if (!characters) return res.status(404).json({ error: "Data not Found" });
+    res.status(200).json({
+      data: characters.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1)),
+    });
+  } catch (error) {
+    res.status(404).json({ error: "Error While Fetching Data" });
+  }
+}
+
+// get : http://localhost:3000/api/characters/1
+export async function getCharacter(
+  req: NextApiRequest,
+  res: NextApiResponse<ResponseData>
+) {
+  try {
+    const { charId } = req.query;
+
+    if (charId) {
+      const character = await Character.findById(charId);
+      res.status(200).json(character);
+    }
+    res.status(404).json({ error: "Character not Selected...!" });
+  } catch (error) {
+    res.status(404).json({ error: "Cannot get the Character...!" });
+  }
+}
+
+// post : http://localhost:3000/api/characters
+export async function postCharacter(
+  req: NextApiRequest,
+  res: NextApiResponse<ResponseData>
+) {
+  try {
+    const formData = req.body;
+    if (!formData)
+      return res.status(404).json({ error: "Form Data Not Provided...!" });
+    Character.create(formData, function (err: Error, data: any) {
+      return res.status(200).json(data);
+    });
+  } catch (error) {
+    return res.status(404).json({ error: error as Error });
+  }
+}
+
+// put : http://localhost:3000/api/characters/1
+export async function putCharacter(
+  req: NextApiRequest,
+  res: NextApiResponse<ResponseData>
+) {
+  try {
+    const { charId } = req.query;
+    const formData = req.body;
+
+    if (charId && formData) {
+      const character = await Character.findByIdAndUpdate(charId, formData);
+      res.status(200).json(character);
+    }
+    res.status(404).json({ error: "Character Not Selected...!" });
+  } catch (error) {
+    res.status(404).json({ error: "Error While Updating the Data...!" });
+  }
+}
+
+// delete : http://localhost:3000/api/characters/1
+export async function deleteCharacter(
+  req: NextApiRequest,
+  res: NextApiResponse<ResponseData>
+) {
+  try {
+    const { charId } = req.query;
+
+    if (!charId)
+      return res.status(404).json({ error: "Character Not Selected...!" });
+
+    const character = await Character.findByIdAndDelete(charId);
+    return res.status(200).json(character);
+  } catch (error) {
+    res.status(404).json({ error: "Error While Deleting the Character...!" });
+  }
 }

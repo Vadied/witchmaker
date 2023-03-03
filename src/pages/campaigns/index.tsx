@@ -53,7 +53,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     return {
       props: {
         redirect: {
-          destination: `/${PAGE_AUTH}?callbackUrl=${process.env.CURRENT_URL}/${PAGE_CAMPAIGNS}`,
+          destination: `/${PAGE_AUTH}?callbackUrl=${process.env.BASE_URL}/${PAGE_CAMPAIGNS}`,
           permanent: false,
         },
       },

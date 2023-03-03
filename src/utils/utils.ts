@@ -17,6 +17,11 @@ export const handleEnter = (
   callback(params);
 };
 
+export const validateEmail = (email: string): boolean => {
+  const regEx = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+  return regEx.test(email);
+};
+
 export const generateName = () => {
   const prefixes = [
     "Al",

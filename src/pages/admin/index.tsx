@@ -22,7 +22,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     return {
       props: {
         redirect: {
-          destination: `${PAGE_AUTH}?callbackUrl=${process.env.CURRENT_URL}/admin`,
+          destination: `${PAGE_AUTH}?callbackUrl=${process.env.BASE_URL}/admin`,
           permanent: false,
         },
       },

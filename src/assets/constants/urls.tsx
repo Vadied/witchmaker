@@ -4,4 +4,4 @@ export const PAGE_CAMPAIGNS = "campaigns";
 export const PAGE_CHARACTERS = "character";
 export const PAGE_ADMIN = "admin";
 
-export const API_REGISTER = "/api/register";
+export const API_REGISTER = "/api/users";

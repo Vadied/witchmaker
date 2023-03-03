@@ -39,7 +39,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   if (!session)
     return {
       redirect: {
-        destination: `/${PAGE_AUTH}/?callbackUrl=${process.env.CURRENT_URL}/${PAGE_HOME}`,
+        destination: `/${PAGE_AUTH}/?callbackUrl=${process.env.BASE_URL}/${PAGE_HOME}`,
         permanent: false,
       },
     };

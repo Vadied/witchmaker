@@ -12,7 +12,7 @@ const ProviderButtons = ({ providers }: any) => (
             key={p.name}
             type="submit"
             handleClick={() => {
-              signIn(p.id, { callbackUrl: `${process.env.CURRENT_URL}/` });
+              signIn(p.id, { callbackUrl: `${process.env.BASE_URL}/` });
             }}
           >
             <>Sign in with {p.name}</>
