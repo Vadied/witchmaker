@@ -79,6 +79,7 @@ export default async function handler(
       surname,
       email,
       roles: [USER],
+      image: "",
       _id: newUser._id,
     },
   };
@@ -86,7 +87,5 @@ export default async function handler(
   newUser
     .save()
     .then(() => res.status(200).json(response))
-    .catch((error: string) =>
-      res.status(400).json({ error })
-    );
+    .catch((error: string) => res.status(400).json({ error }));
 }

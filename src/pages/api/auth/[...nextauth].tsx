@@ -35,10 +35,10 @@ export const authOptions: AuthOptions = {
         });
 
         // Email Not found
-        if (!user) {
-          throw new Error("Email is not registered");
-        }
+        if (!user) throw new Error("Email is not registered");
 
+        console.log("user trovato", user);
+        console.log("credentials", credentials);
         // Check hased password with DB hashed password
         const isPasswordCorrect = await compare(
           credentials!.password,
@@ -46,9 +46,9 @@ export const authOptions: AuthOptions = {
         );
 
         // Incorrect password
-        if (!isPasswordCorrect) {
-          throw new Error("Password is incorrect");
-        }
+        if (!isPasswordCorrect) throw new Error("Password is incorrect");
+
+        console.log("user inviato");
 
         return user;
       },

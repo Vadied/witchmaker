@@ -58,22 +58,22 @@ export default function Document() {
         />
 
         <meta name="twitter:card" content="summary" />
-        <meta name="twitter:url" content="https://yourdomain.com" />
+        <meta name="twitter:url" content="https://witchmaker.vercel.ap" />
         <meta name="twitter:title" content="WitchMaker" />
         <meta name="twitter:description" content="RPG character creator" />
         <meta
           name="twitter:image"
-          content="https://yourdomain.com/icons/android-chrome-192x192.png"
+          content="https://witchmaker.vercel.ap/icons/android-chrome-192x192.png"
         />
         <meta name="twitter:creator" content="@Vadied91" />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="WitchMaker" />
         <meta property="og:description" content="RPG character creator" />
         <meta property="og:site_name" content="WitchMaker" />
-        <meta property="og:url" content="https://yourdomain.com" />
+        <meta property="og:url" content="https://witchmaker.vercel.ap" />
         <meta
           property="og:image"
-          content="https://yourdomain.com/icons/apple-touch-icon.png"
+          content="https://witchmaker.vercel.ap/icons/apple-touch-icon.png"
         />
 
         <link rel="icon" href="/favicon.ico" />

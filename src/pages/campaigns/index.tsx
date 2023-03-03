@@ -12,7 +12,6 @@ import { useStateContext } from "@/contexts/StateContext";
 
 import Button from "@/components/button";
 import CampaignCard from "@/components/campaignCard";
-import Loader from "@/components/loader";
 
 import { getAllCampaignsByUser } from "@/lib/campaigns";
 

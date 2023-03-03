@@ -21,11 +21,11 @@ const userSchema = new Schema(
       type: String,
       required: true,
       minlength: 5,
-      select: false, // remove hashedPassword from default query
     },
     roles: { type: Array<string> },
     image: {
       type: String,
+      default: "",
     },
   },
   {
@@ -33,12 +33,6 @@ const userSchema = new Schema(
     usePushEach: true,
   }
 );
-
-userSchema.methods.toJSON = function () {
-  const obj = this.toObject();
-  delete obj.password;
-  return obj;
-};
 
 const User = mongoose.models.User || mongoose.model("User", userSchema);
 export default User;
