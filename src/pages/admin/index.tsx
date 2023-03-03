@@ -4,9 +4,8 @@ import { getServerSession } from "next-auth/next";
 
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
-import { isAuthorized } from "@/utils/utils";
+import { isAdmin } from "@/utils/utils";
 
-import { ADMIN } from "@/assets/constants/roles";
 import { PAGE_AUTH } from "@/assets/constants/urls";
 
 const Backoffice = () => {
@@ -18,8 +17,8 @@ export default Backoffice;
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const session: Session | null = await getServerSession(req, res, authOptions);
 
-  const available = isAuthorized(session?.user?.roles || [], [ADMIN]);
-  if (!session || !available)
+  const authorized = isAdmin(session?.user?.roles || []);
+  if (!session || !authorized)
     return {
       props: {
         redirect: {
@@ -30,8 +29,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     };
 
   return {
-    props: {
-      session,
-    },
+    props: {},
   };
 };

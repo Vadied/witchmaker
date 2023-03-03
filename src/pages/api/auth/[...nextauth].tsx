@@ -10,6 +10,7 @@ import User from "@/schemas/User";
 
 import dbConnect from "@/lib/dbConnect";
 import clientPromise from "@/lib/mongoDb";
+import { IUser } from "@/models/user.model";
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -37,8 +38,6 @@ export const authOptions: AuthOptions = {
         // Email Not found
         if (!user) throw new Error("Email is not registered");
 
-        console.log("user trovato", user);
-        console.log("credentials", credentials);
         // Check hased password with DB hashed password
         const isPasswordCorrect = await compare(
           credentials!.password,
@@ -47,8 +46,6 @@ export const authOptions: AuthOptions = {
 
         // Incorrect password
         if (!isPasswordCorrect) throw new Error("Password is incorrect");
-
-        console.log("user inviato");
 
         return user;
       },
@@ -66,6 +63,16 @@ export const authOptions: AuthOptions = {
     signIn: "/auth",
   },
   debug: process.env.NODE_ENV === "development",
+  callbacks: {
+    async session({ session, token, user }) {
+      const { _id, name, surname, email, roles } = await User.findOne({
+        email: session?.user?.email || "",
+      });
+
+      session.user = { id: _id, name, surname, email, roles } as IUser;
+      return session;
+    },
+  },
   adapter: MongoDBAdapter(clientPromise),
   session: {
     strategy: "jwt",

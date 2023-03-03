@@ -8,6 +8,7 @@ import {
   PAGE_AUTH,
   PAGE_CAMPAIGNS,
   PAGE_CHARACTERS,
+  PAGE_HOME,
 } from "@/assets/constants/urls";
 import { authOptions } from "./api/auth/[...nextauth]";
 
@@ -35,18 +36,15 @@ export default Home;
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const session: Session | null = await getServerSession(req, res, authOptions);
-  console.log("session --->", session)
   if (!session)
     return {
       redirect: {
-        destination: `${PAGE_AUTH}/?callbackUrl=${process.env.CURRENT_URL}`,
+        destination: `/${PAGE_AUTH}/?callbackUrl=${process.env.CURRENT_URL}/${PAGE_HOME}`,
         permanent: false,
       },
     };
 
   return {
-    props: {
-      session,
-    },
+    props: {},
   };
 };

@@ -14,7 +14,6 @@ import { handleEnter } from "@/utils/utils";
 import {
   API_REGISTER,
   PAGE_CAMPAIGNS,
-  PAGE_HOME,
   PAGE_AUTH,
 } from "@/assets/constants/urls";
 
@@ -35,7 +34,10 @@ const Auth = ({ providers }: any) => {
 
   const redirectToHome = () => {
     const { pathname } = router;
-    if (pathname === PAGE_AUTH) router.push(PAGE_HOME);
+    console.log(pathname, PAGE_AUTH)
+    if (pathname !== `/${PAGE_AUTH}`) return;
+
+    router.push("/");
   };
 
   type currentValue = {
@@ -47,7 +49,7 @@ const Auth = ({ providers }: any) => {
       email: (emailRef?.current as currentValue).value,
       password: (passwordRef?.current as currentValue).value,
       redirect: false,
-      callbackUrl: PAGE_CAMPAIGNS,
+      callbackUrl: `/${PAGE_CAMPAIGNS}`,
     });
 
     res.error ? console.log("Login error -", res.error) : redirectToHome();

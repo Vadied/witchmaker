@@ -1,16 +1,20 @@
 import { IParams } from "@/models/params.model";
 
+import { ADMIN } from "@/assets/constants/roles";
+
 export const isAuthorized = (userRoles: string[], availablesRoles: string[]) =>
   userRoles.some((r) => availablesRoles.includes(r));
 
-  export const handleEnter = (
-    key: string,
-    callback: (params: IParams) => void,
-    params: IParams = {}
-) => {
-    if (key !== "Enter") return;
+export const isAdmin = (roles: string[]) => isAuthorized(roles, [ADMIN]);
 
-    callback(params);
+export const handleEnter = (
+  key: string,
+  callback: (params: IParams) => void,
+  params: IParams = {}
+) => {
+  if (key !== "Enter") return;
+
+  callback(params);
 };
 
 export const generateName = () => {
