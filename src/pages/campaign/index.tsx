@@ -13,9 +13,8 @@ import { useStateContext } from "@/contexts/StateContext";
 import Button from "@/components/button";
 import CampaignCard from "@/components/campaignCard";
 import Loader from "@/components/loader";
-import Layout from "@/components/layout";
 
-import { getAllCampaignsByUser } from "@/lib/campaigns";
+import { getCampaignsByUser } from "@/lib/campaigns";
 
 import { PAGE_AUTH, PAGE_CAMPAIGNS, PAGE_NEW } from "@/assets/constants/urls";
 
@@ -66,7 +65,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
       },
     };
 
-  const campaigns = await getAllCampaignsByUser(session?.user?.id);
+  const campaigns = await getCampaignsByUser(session?.user?.id);
   return {
     props: { campaigns },
   };
