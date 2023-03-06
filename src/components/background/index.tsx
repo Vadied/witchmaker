@@ -1,4 +1,4 @@
-import style from "./style.module.css";
+import style from "@/styles/Background.module.css";
 
 type Props = {
   children: JSX.Element;

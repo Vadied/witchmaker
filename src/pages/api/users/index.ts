@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { ResponseData } from "@/models/response.model";
 
 import dbConnect from "@/lib/dbConnect";
-import { getUser, postUser, putUser, deleteUser } from "@/lib/users";
+import { getUser, postUser } from "@/lib/users";
 
 export default async function handler(
   req: NextApiRequest,

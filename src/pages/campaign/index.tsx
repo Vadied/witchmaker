@@ -1,8 +1,8 @@
 import { GetServerSideProps } from "next";
+import { useRouter } from "next/router";
 import Link from "next/link";
 import { Session } from "next-auth";
 import { getServerSession } from "next-auth/next";
-import { useSession } from "next-auth/react";
 
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
@@ -12,35 +12,42 @@ import { useStateContext } from "@/contexts/StateContext";
 
 import Button from "@/components/button";
 import CampaignCard from "@/components/campaignCard";
+import Loader from "@/components/loader";
+import Layout from "@/components/layout";
 
 import { getAllCampaignsByUser } from "@/lib/campaigns";
 
-import { PAGE_AUTH, PAGE_CAMPAIGNS } from "@/assets/constants/urls";
+import { PAGE_AUTH, PAGE_CAMPAIGNS, PAGE_NEW } from "@/assets/constants/urls";
 
 type Props = {
   campaigns: ICampaign[];
 };
 const CampaignList = ({ campaigns }: Props) => {
+  const router = useRouter();
   const { t } = useStateContext();
 
   const handleClick = () => {
-    console.log("create new Campaign");
+    router.push(`/${PAGE_CAMPAIGNS}/${PAGE_NEW}`)
   };
 
+  if (!campaigns) return <Loader />;
+
   return (
-    <>
-      <h2 className="title">
-        <div>{t("campaign.list.title")}</div>
-        <Button handleClick={handleClick}>{t("campaign.btn.new.label")}</Button>
-      </h2>
-      <div className="content">
-        {campaigns.map((c: ICampaign) => (
-          <Link key={c.id} href={`campaigns/${c.id}`} passHref>
-            <CampaignCard {...c} />
-          </Link>
-        ))}
-      </div>
-    </>
+      <>
+        <h2 className="title">
+          <div>{t("campaign.list.title")}</div>
+          <Button handleClick={handleClick}>
+            {t("record.btn.new")}
+          </Button>
+        </h2>
+        <div className="content">
+          {campaigns.map((c: ICampaign) => (
+            <Link key={c.id} href={`campaigns/${c.id}`} passHref>
+              <CampaignCard {...c} />
+            </Link>
+          ))}
+        </div>
+      </>
   );
 };
 
@@ -61,9 +68,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 
   const campaigns = await getAllCampaignsByUser(session?.user?.id);
   return {
-    props: {
-      session,
-      campaigns,
-    },
+    props: { campaigns },
   };
 };

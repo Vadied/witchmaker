@@ -1,12 +1,22 @@
 const translation = {
   campaign: {
     list: {
-      title: "Lista Campagne",
+      title: "Campaign list",
     },
+    new: "New campaign",
+  },
+  user: {
+    list: {
+      title: "User list",
+    },
+    new: "New user",
+  },
+  record: {
     btn: {
-      new: {
-        label: "Crea Campagna",
-      },
+      edit: "Edit",
+      save: "Save",
+      new: "New",
+      delete: "Delete",
     },
   },
 };

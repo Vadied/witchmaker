@@ -3,20 +3,16 @@ import { SessionProvider } from "next-auth/react";
 
 import "@/styles/globals.css";
 
-import Navbar from "@/components/navbar";
 import Context from "@/components/context";
-import Background from "@/components/background";
+import Layout from "@/components/layout";
 
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
   return (
     <SessionProvider session={session}>
       <Context>
-        <>
-          <Navbar />
-          <Background>
+        <Layout>
             <Component {...pageProps} />
-          </Background>
-        </>
+        </Layout>
       </Context>
     </SessionProvider>
   );

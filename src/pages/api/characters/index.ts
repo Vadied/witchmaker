@@ -4,7 +4,7 @@ import dbConnect from "@/lib/dbConnect";
 
 import { ResponseData } from "@/models/response.model";
 
-import { getCharacters, postCharacter, putCharacter, deleteCharacter } from "@/lib/characters";
+import { getCharacters, postCharacter} from "@/lib/characters";
 
 export default async function handler(
   req: NextApiRequest,

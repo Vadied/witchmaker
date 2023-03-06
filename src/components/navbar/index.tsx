@@ -35,13 +35,13 @@ const Navbar = () => {
         <Link href="/">WitchMaker</Link>
       </div>
       <div className={`${style.links}`}>
-        <Link href={PAGE_CAMPAIGNS}>Campaigns</Link>
+        <Link href={`/${PAGE_CAMPAIGNS}`}>Campaigns</Link>
 
-        <Link href={PAGE_CHARACTERS}>Characters</Link>
+        <Link href={`/${PAGE_CHARACTERS}`}>Characters</Link>
 
-        {admin && <Link href={PAGE_ADMIN}>BackOffice</Link>}
+        {admin && <Link href={`/${PAGE_ADMIN}`}>BackOffice</Link>}
 
-        <Link href={PAGE_AUTH}>
+        <Link href={`/${PAGE_AUTH}`}>
           <div onClick={handleSignOut}>Sign Out</div>
         </Link>
       </div>

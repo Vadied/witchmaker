@@ -1,29 +1,29 @@
 .auth {
-    width: 420px;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.2));
-    padding: 12px;
-    border-radius: 10px;
-  }
+  width: 420px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.8),
+    rgba(255, 255, 255, 0.2)
+  );
+  padding: 12px;
+  border-radius: 10px;
+}
 
-  .auth .toggle h3 {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-  
-  .form {
-      width: 100%;
-      margin-bottom: 1rem;
-      gap: 1rem;
-  }
+.auth .toggle h3 {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
 
-  .form input {
-    padding: 0.5rem;
-    border: none;
-    border-bottom: 1px solid #000;
-    background: transparent;
-  }
+.form {
+  width: 100%;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
 
-  .form button {
-    
-  }
+.form input {
+  padding: 0.5rem;
+  border: none;
+  border-bottom: 1px solid #000;
+  background: transparent;
+}

@@ -2,17 +2,25 @@ import { GetServerSideProps } from "next";
 import { Session } from "next-auth";
 import { getServerSession } from "next-auth/next";
 
+import styles from "@/styles//Admin.module.css";
+
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
+
+import Backoffice from "@/components/backoffice";
 
 import { isAdmin } from "@/utils/utils";
 
 import { PAGE_AUTH } from "@/assets/constants/urls";
 
-const Backoffice = () => {
-  return <div>Backoffice</div>;
+const Admin = () => {
+  return (
+    <Backoffice>
+      <div className={styles.container}>Admin</div>
+    </Backoffice>
+  );
 };
 
-export default Backoffice;
+export default Admin;
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const session: Session | null = await getServerSession(req, res, authOptions);

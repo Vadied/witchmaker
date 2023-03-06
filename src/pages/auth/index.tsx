@@ -1,6 +1,6 @@
 import { useState, useRef, KeyboardEventHandler } from "react";
 import { useRouter } from "next/router";
-import { getProviders, signIn } from "next-auth/react";
+import { getProviders, signIn, useSession } from "next-auth/react";
 import axios from "axios";
 
 import style from "@/styles/Auth.module.css";
@@ -12,13 +12,15 @@ import Button from "@/components/button";
 import { handleEnter } from "@/utils/utils";
 
 import {
-  API_REGISTER,
+  API_USERS,
   PAGE_CAMPAIGNS,
   PAGE_AUTH,
 } from "@/assets/constants/urls";
+import Loader from "@/components/loader";
 
 const Auth = ({ providers }: any) => {
   const router = useRouter();
+  const { status } = useSession();
 
   const nameRef = useRef<HTMLInputElement>(null);
   const surnameRef = useRef<HTMLInputElement>(null);
@@ -27,6 +29,8 @@ const Auth = ({ providers }: any) => {
   const confirmRef = useRef<HTMLInputElement>(null);
 
   const [authType, setAutType] = useState("Login");
+  if (status === "loading") return <Loader />;
+
   const oppAuthType: { [key: string]: string } = {
     Login: "Register",
     Register: "Login",
@@ -34,7 +38,6 @@ const Auth = ({ providers }: any) => {
 
   const redirectToHome = () => {
     const { pathname } = router;
-    console.log(pathname, PAGE_AUTH)
     if (pathname !== `/${PAGE_AUTH}`) return;
 
     router.push("/");
@@ -58,7 +61,7 @@ const Auth = ({ providers }: any) => {
   const registerUser = async () => {
     try {
       await axios.post(
-        API_REGISTER,
+        API_USERS,
         {
           name: (nameRef?.current as currentValue).value,
           surname: (surnameRef?.current as currentValue).value,
