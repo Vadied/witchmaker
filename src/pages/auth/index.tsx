@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { getProviders, signIn, useSession } from "next-auth/react";
 import axios from "axios";
 
-import style from "@/styles/Auth.module.css";
+import style from "@/styles/pages/Auth.module.css";
 
 import Divider from "@/components/divider";
 import ProviderButtons from "@/components/providersButtons";

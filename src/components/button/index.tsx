@@ -1,4 +1,4 @@
-import style from "@/styles/Button.module.css";
+import style from "@/styles/components/Button.module.css";
 
 export type Props = {
   type?: string;

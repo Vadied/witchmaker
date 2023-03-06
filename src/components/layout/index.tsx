@@ -1,4 +1,4 @@
-import styles from "@/styles//Layout.module.css";
+import styles from "@/styles/components/Layout.module.css";
 
 import Background from "@/components/background";
 import Navbar from "@/components/navbar";

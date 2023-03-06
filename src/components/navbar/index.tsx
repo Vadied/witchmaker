@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 
-import style from "@/styles/Navbar.module.css";
+import style from "@/styles/components/Navbar.module.css";
 
 import { isAdmin } from "@/utils/utils";
 

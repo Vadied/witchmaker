@@ -2,7 +2,7 @@ import { GetServerSideProps } from "next";
 import { Session } from "next-auth";
 import { getServerSession } from "next-auth/next";
 
-import styles from "@/styles//Admin.module.css";
+import styles from "@/styles/pages/Admin.module.css";
 
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 

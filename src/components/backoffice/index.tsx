@@ -1,6 +1,8 @@
-import { PAGE_USER } from "@/assets/constants/urls";
-import styles from "@/styles/Backoffice.module.css";
 import Link from "next/link";
+
+import styles from "@/styles/components/Backoffice.module.css";
+
+import { PAGE_USER } from "@/assets/constants/urls";
 
 type Props = {
   children: JSX.Element;
