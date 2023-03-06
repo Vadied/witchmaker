@@ -1,4 +1,4 @@
-import style from "./style.module.css";
+import style from "@/styles/Divider.module.css";
 
 type Props = {
   word?: string;

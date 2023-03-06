@@ -22,6 +22,11 @@ export const validateEmail = (email: string): boolean => {
   return regEx.test(email);
 };
 
+export const range = (size: number, start: number = 0, step: number = 1) => {
+  const arr = new Array(size);
+  return arr.map((el: number, i: number) => start + i * step);
+};
+
 export const generateName = () => {
   const prefixes = [
     "Al",

@@ -1,5 +1,5 @@
 import { signIn } from "next-auth/react";
-import style from "./style.module.css";
+import style from "@/styles/ProvidersBtns.module.css";
 
 import Button from "../button";
 

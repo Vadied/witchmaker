@@ -3,12 +3,15 @@ import { useState } from "react";
 import { useStateContext } from "@/contexts/StateContext";
 
 import Button from "@/components/button";
-import Layout from "@/components/layout";
 import Backoffice from "@/components/backoffice";
+import { currentValue } from "@/models/params.model";
 
 const NewUser = () => {
   const { t } = useStateContext();
   const [record, setRecord] = useState({});
+
+  const updateRecord = (field: string) => (e: HTMLInputElement) =>
+    setRecord({ ...record, [field]: e?.target?.value || "" });
 
   const handleClick = () => {
     console.log("salva record ---->", record);
@@ -22,7 +25,9 @@ const NewUser = () => {
           <Button handleClick={handleClick}>{t("record.btn.save")}</Button>
         </h2>
         <div className="content">
-            Contenuto
+          <input onChange={updateRecord("name")} />
+          <input onChange={updateRecord("surname")} />
+          <input onChange={updateRecord("email")} />
         </div>
       </>
     </Backoffice>
