@@ -11,11 +11,7 @@ import Button from "@/components/button";
 
 import { handleEnter } from "@/utils/utils";
 
-import {
-  API_USERS,
-  PAGE_CAMPAIGNS,
-  PAGE_AUTH,
-} from "@/assets/constants/urls";
+import { API_USERS, PAGE_CAMPAIGNS, PAGE_AUTH } from "@/assets/constants/urls";
 import Loader from "@/components/loader";
 
 const Auth = ({ providers }: any) => {
@@ -93,68 +89,70 @@ const Auth = ({ providers }: any) => {
   const isRegistering = authType === "Register";
 
   return (
-    <div className={`${style.auth}`}>
-      <div className={`${style.toggle} center-content column`}>
-        <h1>{authType}</h1>
-        <h3>
-          {isRegistering ? "Already have an account?" : "Not registerd yet?"}
-          <Button
-            type="link"
-            handleClick={() => setAutType(oppAuthType[authType])}
-          >
-            {oppAuthType[authType]}
-          </Button>
-        </h3>
+    <div className={`${style.container} center-content`}>
+      <div className={`${style.auth}`}>
+        <div className={`${style.toggle} center-content column`}>
+          <h1>{authType}</h1>
+          <h3>
+            {isRegistering ? "Already have an account?" : "Not registerd yet?"}
+            <Button
+              type="link"
+              handleClick={() => setAutType(oppAuthType[authType])}
+            >
+              {oppAuthType[authType]}
+            </Button>
+          </h3>
 
-        <Divider />
+          <Divider />
 
-        <ProviderButtons providers={providers} />
+          <ProviderButtons providers={providers} />
 
-        <Divider word={"Or"} />
+          <Divider word={"Or"} />
 
-        <form onSubmit={formSubmit}>
-          <div className={`${style.form} center-content column`}>
-            {isRegistering && (
+          <form onSubmit={formSubmit}>
+            <div className={`${style.form} center-content column`}>
+              {isRegistering && (
+                <input
+                  type="text"
+                  ref={nameRef}
+                  placeholder={"Name"}
+                  onKeyUp={onKeyUp}
+                />
+              )}
+              {isRegistering && (
+                <input
+                  type="text"
+                  ref={surnameRef}
+                  placeholder={"Surname"}
+                  onKeyUp={onKeyUp}
+                />
+              )}
               <input
-                type="text"
-                ref={nameRef}
-                placeholder={"Name"}
+                type="email"
+                ref={emailRef}
+                placeholder={"Email"}
                 onKeyUp={onKeyUp}
               />
-            )}
-            {isRegistering && (
-              <input
-                type="text"
-                ref={surnameRef}
-                placeholder={"Surname"}
-                onKeyUp={onKeyUp}
-              />
-            )}
-            <input
-              type="email"
-              ref={emailRef}
-              placeholder={"Email"}
-              onKeyUp={onKeyUp}
-            />
-            <input
-              type="password"
-              ref={passwordRef}
-              placeholder={"Password"}
-              onKeyUp={onKeyUp}
-            />
-            {isRegistering && (
               <input
                 type="password"
-                ref={confirmRef}
-                placeholder={"Confirm password"}
+                ref={passwordRef}
+                placeholder={"Password"}
                 onKeyUp={onKeyUp}
               />
-            )}
-            <Button type={"primary"} handleClick={formSubmit}>
-              {authType}
-            </Button>
-          </div>
-        </form>
+              {isRegistering && (
+                <input
+                  type="password"
+                  ref={confirmRef}
+                  placeholder={"Confirm password"}
+                  onKeyUp={onKeyUp}
+                />
+              )}
+              <Button type={"primary"} handleClick={formSubmit}>
+                {authType}
+              </Button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

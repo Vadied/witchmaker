@@ -5,11 +5,11 @@
 }
 
 .container aside {
-  padding: 10px;
+  padding: 1rem;
   background-color: #ebebeb;
 }
 
 .container .content {
-  padding: 10px;
+  padding: 1rem;
   width: 100%
 }

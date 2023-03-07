@@ -8,8 +8,8 @@ import { compare } from "bcrypt";
 
 import User from "@/schemas/User";
 
-import dbConnect from "@/lib/dbConnect";
-import clientPromise from "@/lib/mongoDb";
+import dbConnect from "@/lib/mongo/dbConnect";
+import clientPromise from "@/lib/mongo/mongoDb";
 import { IUser } from "@/models/user.model";
 
 export const authOptions: AuthOptions = {
@@ -69,7 +69,7 @@ export const authOptions: AuthOptions = {
         email: session?.user?.email || "",
       });
 
-      session.user = { id: _id, name, surname, email, roles } as IUser;
+      session.user = { _id: _id.toString(), name, surname, email, roles } as IUser;
       return session;
     },
   },

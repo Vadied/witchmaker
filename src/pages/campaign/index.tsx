@@ -65,7 +65,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
       },
     };
 
-  const campaigns = await getCampaignsByUser(session?.user?.id);
+  const campaigns = await getCampaignsByUser(session?.user?._id);
   return {
     props: { campaigns },
   };

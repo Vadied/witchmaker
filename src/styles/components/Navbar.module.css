@@ -6,9 +6,6 @@
   padding: 5px 10px;
 }
 
-.navbar .logo {
-}
-
 .navbar .links {
   display: flex;
   justify-content: space-evenly;

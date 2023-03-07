@@ -65,7 +65,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
       },
     };
 
-  const characters = await getCharactersByUser(session?.user?.id);
+  const characters = await getCharactersByUser(session?.user?._id);
   return {
     props: { characters },
   };

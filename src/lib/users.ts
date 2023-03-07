@@ -9,36 +9,40 @@ import { validateEmail } from "@/utils/utils";
 
 import { USER } from "@/assets/constants/roles";
 
-// get : http://localhost:3000/api/users
-export async function getUsers(
-  req: NextApiRequest,
-  res: NextApiResponse<ResponseData>
-) {
+export async function getUsers() {
   try {
     const users = await User.find({});
+    if (!users) throw new Error("No users found");
 
-    if (!users) return res.status(404).json({ error: "Data not Found" });
-    res.status(200).json({ data: users });
+    return users.map(({ _id, name, surname, email, roles }) => ({
+      _id: _id.toString(),
+      name,
+      surname,
+      email,
+      roles,
+    }));
   } catch (error) {
-    res.status(404).json({ error: "Error While Fetching Data" });
+    console.log("Error While Fetching Data", error);
+    return [];
   }
 }
 
-// get : http://localhost:3000/api/users/1
-export async function getUser(
-  req: NextApiRequest,
-  res: NextApiResponse<ResponseData>
-) {
+export async function getUser(userId: string) {
   try {
-    const { userId } = req.query;
-
-    if (userId) {
-      const user = await User.findById(userId);
-      res.status(200).json(user);
-    }
-    res.status(404).json({ error: "User not Selected...!" });
+    const user = await User.findById(userId);
+    if (!user) throw new Error("No user found");
+    
+    const { _id, name, surname, email, roles } = user;
+    return {
+      _id: _id.toString(),
+      name,
+      surname,
+      email,
+      roles,
+    };
   } catch (error) {
-    res.status(404).json({ error: "Cannot get the User...!" });
+    console.log("Error While Fetching Data", error);
+    return null;
   }
 }
 

@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+console.log("envirtonment --->", process.env)
 if (!process.env.DB_URL) {
   throw new Error("Please add your DB_URL to .env.local");
 }

@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 import autopopulate from "mongoose-autopopulate";
 
-const Schema = mongoose.Schema;
+const { Schema } = mongoose;
 
-const campaignSchema = new Schema(
+const schema = new Schema(
   {
-    name: { type: String, required: true },
+    name: { type: String, required: true, unique: true },
     closedAt: { type: Date, default: null },
     master: { type: Schema.Types.ObjectId, ref: "User", autopopulate: true },
     createdBy: { type: Schema.Types.ObjectId, ref: "User", autopopulate: true },
@@ -19,8 +19,7 @@ const campaignSchema = new Schema(
   }
 );
 
-campaignSchema.plugin(autopopulate);
+schema.plugin(autopopulate);
 
-const Campaign =
-  mongoose.models.Campaign || mongoose.model("Campaign", campaignSchema);
+const Campaign =  mongoose.models?.Campaign || mongoose.model("Campaign", schema);
 export default Campaign;

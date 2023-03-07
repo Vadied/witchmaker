@@ -21,6 +21,7 @@ export async function getCharacters(
     res.status(404).json({ error: "Error While Fetching Data" });
   }
 }
+
 export async function getCharacterByCampaing(userId: string) {
   try {
     const characters = await Character.find({ createdBy: userId });

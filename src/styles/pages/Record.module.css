@@ -1,0 +1,21 @@
+.content {
+    display: grid;
+    gap: 1rem;
+    grid-template-rows: 1fr;
+}
+
+.content .row {    
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: center;
+}
+
+.content .row.header {
+    font-weight: 800;
+}
+
+.content .row .col.actions {
+    display: flex;
+    gap: 0.5rem;
+}

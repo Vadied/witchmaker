@@ -1,11 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import bcrypt from "bcrypt";
 
 import Campaign from "@/schemas/Campaign";
 
 import { ResponseData } from "@/models/response.model";
 
-import { validateEmail } from "@/utils/utils";
+import { ICampaign } from "@/models/campaign.model";
+import dbConnect from "@/lib/mongo/dbConnect";
+
+dbConnect().catch(() => console.error("Error in the Connection"));
 
 // get : http://localhost:3000/api/campaigns
 export async function getCampaigns(
@@ -37,123 +39,86 @@ export async function getCampaignsByUser(userid: string) {
 
 export async function getCampaign(campaignId: string) {
   try {
-      const campaign = await Campaign.findById(campaignId);
-      if (!campaign) throw new Error(`Campaign not founnd` );
-  
-      return campaign;
-      console.log("Campaign not Selected...!")
+    const campaign = await Campaign.findById(campaignId);
+    if (!campaign) throw new Error(`Campaign not found`);
+
+    return campaign;
   } catch (error) {
-    console.log("Cannot get the Campaign...!", error)
-    return null
+    console.log("Cannot get the Campaign...!", error);
+    return null;
   }
 }
 
-const validateForm = async (
-  name: string,
-  email: string,
-  password: string,
-  confirmPassword: string
-) => {
-  if (name.length < 3) return { error: "Name must have 3 or more characters" };
+const validateForm = (formData: ICampaign) => {
+  if (!formData.name) return "Name is required";
 
-  if (!validateEmail(email)) return { error: "Email is invalid" };
+  if (formData.name.length < 3) return "Name must have 3 or more characters";
 
-  if (password.length < 5)
-    return { error: "Password must have 5 or more characters" };
-
-  if (password !== confirmPassword) return { error: "Passwords do not match" };
-
-  const emailCampaign = await Campaign.findOne({ email: email });
-
-  if (emailCampaign) return { error: "Email already exists" };
-
-  return null;
+  return "";
 };
 
-// post : http://localhost:3000/api/campaigns
-export async function postCampaign(
-  req: NextApiRequest,
-  res: NextApiResponse<ResponseData>
-) {
+export async function postCampaign(formData: ICampaign, userId: string) {
   try {
-    const formData = req.body;
-    if (!formData)
-      return res.status(404).json({ error: "Form Data Not Provided...!" });
+    if (!formData) throw new Error("Form Data Not Provided...!");
 
-    // get and validate body variables
-    const { name, surname, email, password, confirmPassword } = req.body;
-
-    const errorMessage = await validateForm(
-      name,
-      email,
-      password,
-      confirmPassword
-    );
-    if (errorMessage) return res.status(400).json(errorMessage as ResponseData);
-
-    // hash password
-    const hashedPassword = await bcrypt.hash(password, 12);
+    const errorMessage = validateForm(formData);
+    if (errorMessage) throw new Error(errorMessage);
 
     // create new Campaign on MongoDB
-    Campaign.create(
-      {
-        name,
-        surname,
-        email,
-        hashedPassword,
-      },
-      function (err: Error, data: any) {
-        const { _id } = data;
-        return res.status(200).json({
-          msg: "Successfuly created new Campaign",
-          data: {
-            name,
-            surname,
-            email,
-            image: "",
-            id: _id,
-          },
-        });
-      }
-    );
+    const test = {
+      ...formData,
+      master: userId,
+      createdBy: userId,
+      characters: [],
+      closedAt: null,
+    };
+    const newCampaign = new Campaign(test);
+
+    console.log("type --->", newCampaign instanceof Campaign);
+    console.log("nuova campagna --->", newCampaign);
+    const saved = await newCampaign.save();
+    // const saved = await Campaign.create(test);
+    console.log("creata campagna --->", saved);
+    return saved._id.toString();
   } catch (error) {
-    return res.status(404).json({ error: error as Error });
+    console.log("Error saving record -", error);
+    return null;
   }
 }
 
 // put : http://localhost:3000/api/campaigns/1
-export async function putCampaign(
-  req: NextApiRequest,
-  res: NextApiResponse<ResponseData>
-) {
-  try {
-    const { campaignId } = req.query;
-    const formData = req.body;
+// export async function putCampaign(
+//   req: NextApiRequest,
+//   res: NextApiResponse<ResponseData>
+// ) {
+//   try {
+//     const { campaignId } = req.query;
+//     const formData = req.body;
 
-    if (campaignId && formData) {
-      const campaign = await Campaign.findByIdAndUpdate(campaignId, formData);
-      res.status(200).json(campaign);
-    }
-    res.status(404).json({ error: "Campaign Not Selected...!" });
-  } catch (error) {
-    res.status(404).json({ error: "Error While Updating the Data...!" });
-  }
-}
+//     if (campaignId && formData) {
+//       const campaign = await Campaign.findByIdAndUpdate(campaignId, formData);
+//       res.status(200).json({messages: "campaign"});
+//     }
+//     res.status(404).json({ error: "Campaign Not Selected...!" });
+//   } catch (error) {
+//     res.status(404).json({ error: "Error While Updating the Data...!" });
+//   }
+// }
 
-// delete : http://localhost:3000/api/campaigns/1
-export async function deleteCampaign(
-  req: NextApiRequest,
-  res: NextApiResponse<ResponseData>
-) {
-  try {
-    const { campaignId } = req.query;
+// // delete : http://localhost:3000/api/campaigns/1
+// export async function deleteCampaign(
+//   req: NextApiRequest,
+//   res: NextApiResponse<ResponseData>
+// ) {
+//   try {
+//     const { campaignId } = req.query;
 
-    if (campaignId)
-      return res.status(404).json({ error: "Campaign Not Selected...!" });
+//     if (campaignId)
+//       return res.status(404).json({ error: "Campaign Not Selected...!" });
 
-    const campaign = await Campaign.findByIdAndDelete(campaignId);
-    return res.status(200).json(campaign);
-  } catch (error) {
-    res.status(404).json({ error: "Error While Deleting the Campaign...!" });
-  }
-}
+//     const campaign = await Campaign.findByIdAndDelete(campaignId);
+//     return res.status(200).json("campaign");
+//   } catch (error) {
+//     res.status(404).json({ error: "Error While Deleting the Campaign...!" });
+//   }
+// }

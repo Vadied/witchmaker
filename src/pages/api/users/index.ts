@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 import { ResponseData } from "@/models/response.model";
 
-import dbConnect from "@/lib/dbConnect";
+import dbConnect from "@/lib/mongo/dbConnect";
 import { getUser, postUser } from "@/lib/users";
 
 export default async function handler(
