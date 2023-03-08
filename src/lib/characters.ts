@@ -22,7 +22,7 @@ export async function getCharacters(
   }
 }
 
-export async function getCharacterByCampaing(userId: string) {
+export async function getCharacterByCampaign(userId: string) {
   try {
     const characters = await Character.find({ createdBy: userId });
     if (!characters) return [];
@@ -34,12 +34,18 @@ export async function getCharacterByCampaing(userId: string) {
   }
 }
 
-export async function getCharactersByUser(userid: string) {
+export async function getCharactersByUser(
+  req: NextApiRequest,
+  res: NextApiResponse<ResponseData>
+) {
   try {
-    const characters = await Character.find({ campaign: userid });
-    if (!characters) return [];
+    const { userId } = req.body;
+    if (!userId) return res.status(404).json({ error: "User not found" });
 
-    return characters;
+    const data = await Character.find({ campaign: userId });
+    if (!data) return [];
+
+    return data;
   } catch (error) {
     console.log({ error: "Error While Fetching Data" });
     return [];

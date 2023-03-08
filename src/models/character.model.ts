@@ -6,8 +6,8 @@ export interface ICharacter {
   id: string;
   name: string;
   level: number;
-  class: IClass | string;
-  campaign: ICampaign | string;
-  createdBy: IUser | string;
+  classes: IClass[];
+  campaign: ICampaign;
+  createdBy: IUser;
   createdAt: string;
 }

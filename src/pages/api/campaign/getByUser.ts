@@ -4,7 +4,7 @@ import dbConnect from "@/lib/mongo/dbConnect";
 
 import { ResponseData } from "@/models/response.model";
 
-import { getCharactersByUser } from "@/lib/characters";
+import { getCampaignsByUser } from "@/lib/campaigns";
 
 export default async function handler(
   req: NextApiRequest,
@@ -19,7 +19,7 @@ export default async function handler(
 
   switch (method) {
     case "POST":
-      getCharactersByUser(req, res);
+      getCampaignsByUser(req, res);
       break;
     default:
       res.setHeader("Allow", ["POST"]);

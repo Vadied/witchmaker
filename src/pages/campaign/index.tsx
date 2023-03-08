@@ -14,9 +14,13 @@ import Button from "@/components/button";
 import CampaignCard from "@/components/campaignCard";
 import Loader from "@/components/loader";
 
-import { getCampaignsByUser } from "@/lib/campaigns";
-
-import { PAGE_AUTH, PAGE_CAMPAIGNS, PAGE_NEW } from "@/assets/constants/urls";
+import {
+  API_CAMPAIGN,
+  PAGE_AUTH,
+  PAGE_CAMPAIGNS,
+  PAGE_NEW,
+} from "@/assets/constants/urls";
+import axios from "axios";
 
 type Props = {
   campaigns: ICampaign[];
@@ -26,27 +30,25 @@ const CampaignList = ({ campaigns }: Props) => {
   const { t } = useStateContext();
 
   const handleClick = () => {
-    router.push(`/${PAGE_CAMPAIGNS}/${PAGE_NEW}`)
+    router.push(`/${PAGE_CAMPAIGNS}/${PAGE_NEW}`);
   };
 
   if (!campaigns) return <Loader />;
 
   return (
-      <>
-        <h2 className="title">
-          <div>{t("campaign.list.title")}</div>
-          <Button handleClick={handleClick}>
-            {t("record.btn.new")}
-          </Button>
-        </h2>
-        <div className="content">
-          {campaigns.map((c: ICampaign) => (
-            <Link key={c.id} href={`campaigns/${c.id}`} passHref>
-              <CampaignCard {...c} />
-            </Link>
-          ))}
-        </div>
-      </>
+    <>
+      <h2 className="title">
+        <div>{t("campaign.list.title")}</div>
+        <Button handleClick={handleClick}>{t("record.btn.new")}</Button>
+      </h2>
+      <div className="content">
+        {campaigns.map((c: ICampaign) => (
+          <Link key={c.id} href={`campaigns/${c.id}`} passHref>
+            <CampaignCard {...c} />
+          </Link>
+        ))}
+      </div>
+    </>
   );
 };
 
@@ -54,7 +56,6 @@ export default CampaignList;
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const session: Session | null = await getServerSession(req, res, authOptions);
-
   if (!session)
     return {
       props: {
@@ -65,8 +66,20 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
       },
     };
 
-  const campaigns = await getCampaignsByUser(session?.user?._id);
-  return {
-    props: { campaigns },
-  };
+    console.log("pre")
+  const { data } = await axios.get(`${process.env.BASE_URL}/${API_CAMPAIGN}`);
+  
+  console.log("post", data)
+  // if (!data.campaigns)
+  //   return {
+  //     props: { campaigns: [] },
+  //   };
+
+  // return {
+  //   props: { campaigns: data.campaign },
+  // };
+
+    return {
+      props: { campaigns: [] },
+    };
 };

@@ -57,7 +57,7 @@ const Auth = ({ providers }: any) => {
   const registerUser = async () => {
     try {
       await axios.post(
-        API_USERS,
+        `/${API_USERS}`,
         {
           name: (nameRef?.current as currentValue).value,
           surname: (surnameRef?.current as currentValue).value,

@@ -4,7 +4,7 @@ import dbConnect from "@/lib/mongo/dbConnect";
 
 import { ResponseData } from "@/models/response.model";
 
-import { getCharactersByUser } from "@/lib/characters";
+import { getCampaign, putCampaign, deleteCampaign } from "@/lib/campaigns";
 
 export default async function handler(
   req: NextApiRequest,
@@ -18,11 +18,17 @@ export default async function handler(
   const { method } = req;
 
   switch (method) {
-    case "POST":
-      getCharactersByUser(req, res);
+    case "GET":
+      getCampaign(req, res);
+      break;
+    case "PUT":
+      putCampaign(req, res);
+      break;
+    case "DELETE":
+      deleteCampaign(req, res);
       break;
     default:
-      res.setHeader("Allow", ["POST"]);
+      res.setHeader("Allow", ["GET", "PUT", "DELETE"]);
       res.status(405).end(`Method ${method} Not Allowed`);
       break;
   }

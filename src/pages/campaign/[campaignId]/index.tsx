@@ -12,13 +12,18 @@ import Loader from "@/components/loader";
 
 import { getCampaign } from "@/lib/campaigns";
 
-import { PAGE_AUTH, PAGE_CAMPAIGNS } from "@/assets/constants/urls";
+import {
+  API_CAMPAIGN,
+  PAGE_AUTH,
+  PAGE_CAMPAIGNS,
+} from "@/assets/constants/urls";
+import axios from "axios";
 
 interface Props extends ICampaign {
   characters: ICharacter[];
 }
 const Campaign = ({ name, id, characters = [] }: Props) => {
-  const {status} = useSession();
+  const { status } = useSession();
 
   if (status === "loading") return <Loader />;
 
@@ -36,6 +41,8 @@ const Campaign = ({ name, id, characters = [] }: Props) => {
   );
 };
 
+export default Campaign;
+
 export const getServerSideProps: GetServerSideProps = async ({
   req,
   res,
@@ -43,40 +50,27 @@ export const getServerSideProps: GetServerSideProps = async ({
 }) => {
   const session: Session | null = await getServerSession(req, res, authOptions);
 
-  const { campaingId } = query;
+  const { campaignId } = query;
+  if (!campaignId)
+    return {
+      props: {
+        redirect: {
+          destination: `/${PAGE_CAMPAIGNS}`,
+          permanent: false,
+        },
+      },
+    };
 
   if (!session)
     return {
       props: {
         redirect: {
-          destination: `/${PAGE_AUTH}?callbackUrl=${process.env.BASE_URL}/${PAGE_CAMPAIGNS}/${campaingId}`,
+          destination: `/${PAGE_AUTH}?callbackUrl=${process.env.BASE_URL}/${PAGE_CAMPAIGNS}/${campaignId}`,
           permanent: false,
         },
       },
     };
 
-    if(!campaingId) 
-    return {
-      props: {
-        redirect: {
-          destination: `/${PAGE_CAMPAIGNS}`,
-          permanent: false,
-        },
-      },
-    };
-
-  const campaign = await getCampaign(campaingId as string);
-    if(!campaingId) 
-    return {
-      props: {
-        redirect: {
-          destination: `/${PAGE_CAMPAIGNS}`,
-          permanent: false,
-        },
-      },
-    };
-
-  return { props: { ...campaign } };
+  const {data} = await axios.get(`${API_CAMPAIGN}/${campaignId}`);
+  return { props: { ...data.campaign } };
 };
-
-export default Campaign;

@@ -3,6 +3,7 @@ import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { getServerSession, Session } from "next-auth";
 import { useSession } from "next-auth/react";
+import axios from "axios";
 
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
@@ -13,9 +14,11 @@ import { useStateContext } from "@/contexts/StateContext";
 import Loader from "@/components/loader";
 import Button from "@/components/button";
 
-import { postCampaign } from "@/lib/campaigns";
-
-import { PAGE_AUTH, PAGE_CAMPAIGNS } from "@/assets/constants/urls";
+import {
+  API_CAMPAIGN,
+  PAGE_AUTH,
+  PAGE_CAMPAIGNS,
+} from "@/assets/constants/urls";
 
 type Props = {
   userId: string;
@@ -32,10 +35,13 @@ const NewCampaign = ({ userId }: Props) => {
     setRecord((r) => ({ ...r, [field]: e?.target?.value || "" }));
 
   const handleClick = async () => {
-    const id = await postCampaign(record, userId);
-    if (!id) return;
+    const { data } = await axios.post(`/${API_CAMPAIGN}`, {
+      ...record,
+      userId,
+    });
+    if (!data.id) return;
 
-    router.push(`/${PAGE_CAMPAIGNS}/${id}`);
+    router.push(`/${PAGE_CAMPAIGNS}/${data.id}`);
   };
 
   return (
