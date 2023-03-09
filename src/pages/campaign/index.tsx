@@ -4,6 +4,8 @@ import Link from "next/link";
 import { Session } from "next-auth";
 import { getServerSession } from "next-auth/next";
 
+import style from "@/styles/pages/Campaigns.module.css";
+
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
 import { ICampaign } from "@/models/campaign.model";
@@ -21,19 +23,22 @@ import {
   PAGE_NEW,
 } from "@/assets/constants/urls";
 import axios from "axios";
+import { useSession } from "next-auth/react";
 
 type Props = {
   campaigns: ICampaign[];
 };
-const CampaignList = ({ campaigns }: Props) => {
+const CampaignList = ({ campaigns = [] }: Props) => {
   const router = useRouter();
   const { t } = useStateContext();
+  const { status } = useSession();
 
   const handleClick = () => {
     router.push(`/${PAGE_CAMPAIGNS}/${PAGE_NEW}`);
   };
 
-  if (!campaigns) return <Loader />;
+  console.log("test ", campaigns);
+  if (status === "loading") return <Loader />;
 
   return (
     <>
@@ -41,11 +46,9 @@ const CampaignList = ({ campaigns }: Props) => {
         <div>{t("campaign.list.title")}</div>
         <Button handleClick={handleClick}>{t("record.btn.new")}</Button>
       </h2>
-      <div className="content">
+      <div className={style.content}>
         {campaigns.map((c: ICampaign) => (
-          <Link key={c.id} href={`campaigns/${c.id}`} passHref>
-            <CampaignCard {...c} />
-          </Link>
+          <CampaignCard key={c._id} {...c} />
         ))}
       </div>
     </>
@@ -66,20 +69,17 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
       },
     };
 
-    console.log("pre")
-  const { data } = await axios.get(`${process.env.BASE_URL}/${API_CAMPAIGN}`);
-  
-  console.log("post", data)
-  // if (!data.campaigns)
-  //   return {
-  //     props: { campaigns: [] },
-  //   };
+  const { data } = await axios.post(
+    `${process.env.BASE_URL}/${API_CAMPAIGN}/getByUser`,
+    { userId: session.user._id }
+  );
 
-  // return {
-  //   props: { campaigns: data.campaign },
-  // };
-
+  if (!data)
     return {
       props: { campaigns: [] },
     };
+
+  return {
+    props: { campaigns: data },
+  };
 };

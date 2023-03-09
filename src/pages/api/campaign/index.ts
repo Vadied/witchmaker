@@ -4,7 +4,7 @@ import dbConnect from "@/lib/mongo/dbConnect";
 
 import { ResponseData } from "@/models/response.model";
 
-import { getCampaigns, postCampaign} from "@/lib/campaigns";
+import { deleteCampaign, getCampaigns, postCampaign} from "@/lib/campaigns";
 
 export default async function handler(
   req: NextApiRequest,

@@ -7,11 +7,11 @@ const schema = new Schema(
   {
     name: { type: String, required: true, unique: true },
     closedAt: { type: Date, default: null },
-    master: { type: Schema.Types.ObjectId, ref: "User", autopopulate: true },
-    createdBy: { type: Schema.Types.ObjectId, ref: "User", autopopulate: true },
-    characters: [
-      { type: Schema.Types.ObjectId, ref: "Character", autopopulate: true },
-    ],
+    master: { type: Schema.Types.ObjectId, ref: "User" },
+    createdBy: { type: Schema.Types.ObjectId, ref: "User" },
+    // characters: [
+    //   { type: Schema.Types.ObjectId, ref: "Character", autopopulate: true },
+    // ],
   },
   {
     timestamps: true,

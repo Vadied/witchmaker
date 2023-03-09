@@ -3,6 +3,9 @@ const translation = {
     list: {
       title: "Campaign list",
     },
+    details: {
+      title: "Campaign",
+    },
     label: {
       name: "Name",
     },

@@ -1,10 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import Campaign from "@/schemas/Campaign";
+import User from "@/schemas/User";
 
 import { ResponseData } from "@/models/response.model";
 
 import { logError } from "@/lib/logData";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
 // get : http://localhost:3000/api/campaign
 export async function getCampaigns(
@@ -22,24 +25,35 @@ export async function getCampaigns(
 }
 
 // post : http://localhost:3000/api/campaign/getByUser
-export async function getCampaignsByUser(
+export const getCampaignsByUser = async (
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>
-) {
+) => {
+  const { userId } = req.body;
   try {
-    const { userId } = req.body;
-    if (!userId) return res.status(404).json({ error: "User not found" });
-
-    const data = await Campaign.find({ createdBy: userId });
-    if (!data) return [];
-
-    return data;
+    const user = await User.findById(userId, {
+      _id: 1,
+      name: 1,
+      surname: 1,
+    });
+    const data = await Campaign.find({ createdBy: user._id })
+      .populate({
+        path: "createdBy",
+        select: {
+          name: 1,
+          surname: 1,
+          _id: 1,
+        },
+        model: User,
+      })
+      .exec();
+    res.status(200).json(data);
   } catch (error: any) {
-    await logError(error, "getCampaignsByUser", req.body);
+    await logError(error, "getCampaignsByUser", req.body, userId);
     console.log({ error: "Error While Fetching Data" });
     return [];
   }
-}
+};
 
 // get : http://localhost:3000/api/campaign/id
 export async function getCampaign(
@@ -47,10 +61,21 @@ export async function getCampaign(
   res: NextApiResponse<ResponseData>
 ) {
   try {
-    const data = await Campaign.find({});
+    const { campaignId } = req.query;
+    const data = await Campaign.findById(campaignId)
+      .populate({
+        path: "createdBy",
+        select: {
+          name: 1,
+          surname: 1,
+          _id: 1,
+        },
+        model: User,
+      })
+      .exec();
     if (!data) return res.status(404).json({ error: "Data not Found" });
 
-    res.status(200).json({ data });
+    res.status(200).json(data);
   } catch (error: any) {
     await logError(error, "getCampaign", req.body);
     res.status(404).json({ error: "Error While Fetching Data" });
@@ -123,12 +148,11 @@ export async function deleteCampaign(
 ) {
   try {
     const { campaignId } = req.query;
-
-    if (campaignId)
+    if (!campaignId)
       return res.status(404).json({ error: "Campaign Not Selected...!" });
 
-    const campaign = await Campaign.findByIdAndDelete(campaignId);
-    return res.status(200).json(campaign);
+    await Campaign.findByIdAndDelete(campaignId);
+    return res.status(200).json({ message: "Campaign successfully deleted" });
   } catch (error: any) {
     await logError(error, "deleteCampaign", req.body);
     res.status(404).json({ error: "Error While Deleting the Campaign...!" });

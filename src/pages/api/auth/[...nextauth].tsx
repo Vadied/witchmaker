@@ -1,5 +1,4 @@
-import { AuthOptions } from "next-auth";
-import NextAuth from "next-auth/next";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GithubProvider from "next-auth/providers/github";
@@ -10,9 +9,8 @@ import User from "@/schemas/User";
 
 import dbConnect from "@/lib/mongo/dbConnect";
 import clientPromise from "@/lib/mongo/mongoDb";
-import { IUser } from "@/models/user.model";
 
-export const authOptions: AuthOptions = {
+export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       id: "credentials",
@@ -69,7 +67,7 @@ export const authOptions: AuthOptions = {
         email: session?.user?.email || "",
       });
 
-      session.user = { _id: _id.toString(), name, surname, email, roles } as IUser;
+      session.user = { _id: _id.toString(), name, surname, email, roles };
       return session;
     },
   },

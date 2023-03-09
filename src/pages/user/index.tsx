@@ -50,7 +50,7 @@ const Userlist = ({ users = [] }: Props) => {
           <div>{t("user.list.title")}</div>
           <Button handleClick={newRecord}>{t("record.btn.new")}</Button>
         </h2>
-        <div className={style.content}>
+        <div className={style.table}>
           <div className={`${style.row} ${style.header}`}>
             <div className={style.col}>{t("user.label.name")}</div>
             <div className={style.col}>{t("user.label.email")}</div>
